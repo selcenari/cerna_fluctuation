@@ -111,7 +111,7 @@ graph <- tissue_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/lung_", i, ".svg"), height = 12, width = 15)
+ggsave(paste0("lung_", i, ".svg"), height = 12, width = 15)
 
 }
 
@@ -184,7 +184,7 @@ graph <- tissue_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/prostate_", i, ".svg"), height = 5, width = 5)
+ggsave(paste0("prostate_", i, ".svg"), height = 5, width = 5)
 
 
 }
@@ -256,7 +256,7 @@ graph <- tissue_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/breast_", i, ".svg"), height = 5, width = 7)
+ggsave(paste0("breast_", i, ".svg"), height = 5, width = 7)
 
 }
 
@@ -274,22 +274,7 @@ cerna_pattern_cancer <- readRDS("data/cerna_pattern_cancer.RDS")
 
 ### 2.1 LUAD 
 
-```{r}
-
-## Data curated from TCGA:
-### To see general dataset dimensions
-
-readRDS("data/tcga_tumor_exp_luad.RDS")
-
-readRDS("data/tcga_tumor_mirna_luad.RDS") %>% 
-  distinct(barcode)
-```
-
-
 ```{r, message=FALSE, warning=FALSE}
-
-length(unique(c(filter(cerna_pattern_cancer, tissue == "LUAD")$geneA, filter(cerna_pattern_cancer, tissue == "LUAD")$geneB)))
-       
 type = "LUAD"
 
 cancer <- cerna_pattern_cancer %>% 
@@ -350,7 +335,7 @@ graph <- cancer_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/luad_", i, ".png"), height = 4, width = 5)
+ggsave(paste0("luad_", i, ".png"), height = 4, width = 5)
 
 }
  
@@ -358,21 +343,7 @@ ggsave(paste0("article_supp/figs/luad_", i, ".png"), height = 4, width = 5)
 
 ### 2.2 PRAD
 
-```{r}
-
-## Data curated from TCGA:
-### To see general dataset dimensions
-
-readRDS("data/tcga_tumor_exp_prad.RDS")#501
-
-readRDS("data/tcga_tumor_mirna_prad.RDS") %>% 
-  distinct(barcode) #498
-```
-
-
-
 ```{r, message=FALSE, warning=FALSE}
-length(unique(c(filter(cerna_pattern_cancer, tissue == "PRAD")$geneA, filter(cerna_pattern_cancer, tissue == "PRAD")$geneB)))
 type = "PRAD"
 
 cancer <- cerna_pattern_cancer %>% 
@@ -390,6 +361,8 @@ starbase_pairs %>%
 length(unique(cancer_cerna$miRNAid))
 length(unique(cancer_cerna$geneID))
 ```
+
+
 ```{r, message=FALSE, warning=FALSE, fig.align='center'}
 cancer_cerna %>% 
   group_by(miRNAname, geneID) %>% 
@@ -416,14 +389,6 @@ cancer_gr2 %>% pull(group) %>% unique() -> group_v
 
 length(group_v)
 
-
-cancer_gr2 %>% 
-  mutate(name = ifelse(startsWith(name, "hsa-"), str_remove(name, "hsa-"), name)) %>% 
-  filter(group==1) 
-
-#127 mirna and 237 ceRNA and 1851 interaction
-
-
 for (i in c(3,4,5,6,7)) {
 
 graph <- cancer_gr2 %>% 
@@ -438,23 +403,13 @@ graph <- cancer_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/prad_", i, ".png"), height = 4, width = 5)
+ggsave(paste0("prad_", i, ".png"), height = 4, width = 5)
 
 }
 
 ```
 
 ### 2.3 BRCA
-
-```{r}
-## Data curated from TCGA:
-### To see general dataset dimensions
-
-readRDS("data/tcga_tumor_exp_brca.RDS")#1111
-
-readRDS("data/tcga_tumor_mirna_brca.RDS") %>% 
-  distinct(barcode) #1096
-```
 
 ```{r, message=FALSE, warning=FALSE}
 
@@ -518,7 +473,7 @@ graph <- cancer_gr2 %>%
 
 print(graph)
 
-ggsave(paste0("article_supp/figs/brca_", i, ".png"), height = 4, width = 5)
+ggsave(paste0("brca_", i, ".png"), height = 4, width = 5)
 
 }
 
@@ -547,8 +502,6 @@ type <- "LUAD"
 
 luad_specific <- setdiff(unique(c(filter(cerna_pattern_cancer, tissue == "LUAD")$geneA, filter(cerna_pattern_cancer, tissue == "LUAD")$geneB)), unique(c(filter(cerna_pattern_normal, tissue == "LUAD")$geneA, filter(cerna_pattern_normal, tissue == "LUAD")$geneB)))
 
-### n= 3204 
-
 cancer <- cerna_pattern_cancer %>% 
   filter(tissue == type) %>% 
   filter(geneA %in% luad_specific | geneB %in% luad_specific)
@@ -570,7 +523,7 @@ Let's check the DEG profiles of the ceRNAs:
 
 ```{r, message=FALSE, warning=FALSE}
 
-tcga_project_normal <-readRDS("data/all_tcga_project_normal.RDS")
+tcga_project_normal <-readRDS("data/tcga_project_normal.RDS") 
 
 data_info_gen <- readRDS("data/data_info_gen.RDS")
 
@@ -582,6 +535,7 @@ rm(tcga_project_normal)
 ```{r, message=FALSE, warning=FALSE}
 
 genes <- luad_specific
+
 project_can <- "LUAD"
 
 colnames(all_tcga_normal) <- substr(colnames(all_tcga_normal), 1,16) 
@@ -606,6 +560,8 @@ all_tcga_normal %>%
   dplyr::select(project_samples) %>% filter(rownames(.) %in% genes)-> all_tcga_normal
 
 ```
+
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -658,8 +614,6 @@ data.frame(sample_id = c(colnames(dea_input))) %>%
   mutate(condition = ifelse(str_detect(sample_id, paste(c("-11A", "-11B"),collapse = '|')), "normal", "tumor"))->coldata
 
 row.names(coldata) <- coldata$sample_id
-
-head(coldata)
 ```
 
 
@@ -744,8 +698,8 @@ kegg <- fgseaResTidy %>%
   theme_minimal()+
    theme(text = element_text(size=15, face = "bold"), legend.position = "none")
 
-ggsave(paste0("article_supp/figs/luad_361_dea_kegg.svg"), plot = kegg, height = 7, width = 12)
-ggsave(paste0("article_supp/figs/luad_361_dea_hallmark.svg"), plot = hallmark, height = 7, width = 12)
+ggsave(paste0("luad_361_dea_kegg.svg"), plot = kegg, height = 7, width = 12)
+ggsave(paste0("luad_361_dea_hallmark.svg"), plot = hallmark, height = 7, width = 12)
 ```
 
 
@@ -755,7 +709,7 @@ library(svglite)
 require(gridExtra)
 graph_path<- grid.arrange(kegg, hallmark, nrow=2)
 
-ggsave(paste0("article_supp/figs/luad_361_dea_genes.svg"), plot = graph_path, height = 7, width = 17)
+ggsave(paste0("luad_361_dea_genes.svg"), plot = graph_path, height = 7, width = 17)
 ```
 
 #### Construction of Subnetworks
@@ -833,7 +787,7 @@ graph2 <- exp_graph %>%
 require(gridExtra)
 graph3<- grid.arrange(graph, graph2, nrow=2)
 
-ggsave(paste0("article_supp/LUAD/LUAD_vs_lung_", i, ".svg"), plot = graph3, height = 7, width = 5)
+ggsave(paste0("LUAD_vs_lung_", i, ".svg"), plot = graph3, height = 7, width = 5)
 
 }
  
@@ -921,6 +875,8 @@ all_tcga_normal %>%
 
 ```
 
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
 
@@ -973,7 +929,6 @@ data.frame(sample_id = c(colnames(dea_input))) %>%
 
 row.names(coldata) <- coldata$sample_id
 
-head(coldata)
 ```
 
 
@@ -1133,7 +1088,7 @@ require(gridExtra)
 graph3<- grid.arrange(graph, graph2, nrow=2)
 
 
-ggsave(paste0("article_supp/PRAD/PRAD_vs_prostate_", i, ".svg"), plot = graph3, height = 7, width = 5)
+ggsave(paste0("PRAD_vs_prostate_", i, ".svg"), plot = graph3, height = 7, width = 5)
 
 }
  
@@ -1221,6 +1176,8 @@ all_tcga_normal %>%
 
 ```
 
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
 
@@ -1273,7 +1230,6 @@ data.frame(sample_id = c(colnames(dea_input))) %>%
 
 row.names(coldata) <- coldata$sample_id
 
-head(coldata)
 ```
 
 
@@ -1357,8 +1313,8 @@ kegg <- fgseaResTidy %>%
 
 kegg
 
-ggsave(paste0("article_supp/figs/brca_dea_hallmark.svg"), plot = hallmark,  height = 4, width = 12)
-ggsave(paste0("article_supp/figs/brca_dea_kegg.svg"), plot = kegg, height = 4, width = 12)
+ggsave(paste0("brca_dea_hallmark.svg"), plot = hallmark,  height = 4, width = 12)
+ggsave(paste0("brca_dea_kegg.svg"), plot = kegg, height = 4, width = 12)
 
 ```
 
@@ -1366,7 +1322,7 @@ ggsave(paste0("article_supp/figs/brca_dea_kegg.svg"), plot = kegg, height = 4, w
 require(gridExtra)
 graph_path<- grid.arrange(kegg, hallmark, ncol=2)
 
-ggsave(paste0("article_supp/figs/brca_dea_genes.svg"), plot = graph_path,  height = 7, width = 12)
+ggsave(paste0("brca_dea_genes.svg"), plot = graph_path,  height = 7, width = 12)
 ```
 
 #### Construction of Subnetworks
@@ -1439,7 +1395,7 @@ graph2 <- exp_graph %>%
 require(gridExtra)
 graph3<- grid.arrange(graph, graph2, nrow=2)
 
-ggsave(paste0("article_supp/BRCA/BRCA_vs_breast_", i, ".svg"), plot = graph3, height = 7, width = 5)
+ggsave(paste0("BRCA_vs_breast_", i, ".svg"), plot = graph3, height = 7, width = 5)
 
 }
  
@@ -1482,7 +1438,7 @@ venn1 <- ggVennDiagram(ceRNA, label = "count", set_size = 10, label_size = 12)+
 
 venn1
 
-ggsave("article_supp/figs/all_three_samples_comparison.svg", height = 8, width = 8)
+ggsave("all_three_samples_comparison.svg", height = 8, width = 8)
 ```
 
 ### Funtional Annotation of Common 90 genes:
@@ -1515,7 +1471,7 @@ common_fa%>%
   theme(panel.grid = element_blank(), axis.title = element_text(size =8), axis.text = element_text(size = 8),legend.position = "none")+
   facet_wrap(~category,  ncol=1, scales='free')
   
-ggsave(filename = 'article_supp/figs/common_genes_go_terms.png', width = 10, height = 7)
+ggsave(filename = 'common_genes_go_terms.png', width = 10, height = 7)
 ```
 
 ### 4.1 LUAD DEG of 90 common genes
@@ -1557,6 +1513,8 @@ all_tcga_normal %>%
 
 
 ```
+
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1658,7 +1616,7 @@ heatmap <- pheatmap(
   scale = "row" # Scale values in the direction of genes (rows)
 )
 
-ggsave("article_supp/LUAD/ceRNA_luad_commonn_three.svg", plot = heatmap,height = 3, width = 8)
+ggsave("ceRNA_luad_commonn_three.svg", plot = heatmap,height = 3, width = 8)
 ```
 
 ### 4.2 PRAD DEG of 90 common genes
@@ -1700,6 +1658,8 @@ all_tcga_normal %>%
 
 
 ```
+
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1801,7 +1761,7 @@ heatmap <- pheatmap(
   scale = "row" # Scale values in the direction of genes (rows)
 )
 
-ggsave("article_supp/PRAD/ceRNA_prad_commonn_three.svg", plot = heatmap,height = 3, width = 8)
+ggsave("ceRNA_prad_commonn_three.svg", plot = heatmap,height = 3, width = 8)
 ```
 
 ### 4.3 BRCA DEG of 90 common genes
@@ -1843,6 +1803,8 @@ all_tcga_normal %>%
 
 
 ```
+
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1949,7 +1911,7 @@ heatmap <- pheatmap(
   scale = "row" # Scale values in the direction of genes (rows)
 )
 
-ggsave("article_supp/BRCA/ceRNA_brca_commonn_three.svg", plot = heatmap,height = 3, width = 8)
+ggsave("ceRNA_brca_commonn_three.svg", plot = heatmap,height = 3, width = 8)
 ```
 
 
@@ -1995,7 +1957,7 @@ cancer_gr2 %>% pull(group) %>% unique() -> group_v
 
 
 ```{r}
-svg("article_supp/figs/common_ceRNA_overall_circlize.svg", height = 25, width = 25)
+svg("common_ceRNA_overall_circlize.svg", height = 25, width = 25)
 
 cancer_gr2 %>%
   activate(edges) %>% 
