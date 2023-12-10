@@ -37,7 +37,6 @@ pathways_kegg <- fgsea::gmtPathways("data/c2.cp.kegg.v2023.1.Hs.symbols.gmt")
 
 # CHAPTER1:
 
-
 ## 1. NORMAL TISSUE ANALYSIS
 
 ```{r}

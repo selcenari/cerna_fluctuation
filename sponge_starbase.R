@@ -8,19 +8,19 @@ library(SPONGE)
 ### This file just an example of sparse partial correlation workflow for a particular tissue (BRCA). 
 
 #miRNA expression data of All normal tissues:
-readRDS("TCGA_data_normal/all_tcga_normal_mirna.RDS")-> all_tcga_normal_mirna
+readRDS("data/all_tcga_normal_mirna.RDS")-> all_tcga_normal_mirna
 
 #Gene expression data of All normal tissues:
-readRDS("TCGA_data_normal/all_tcga_normal.RDS")-> all_tcga_normal
+readRDS("data/tcga_project_normal.RDS")-> all_tcga_normal
 
 #miRNA:ceRNA pairs from ENCORI
-readRDS("TCGA_data_normal/starbase_pairs.RDS")-> starbase_pairs
+readRDS("data/starbase_pairs.RDS")-> starbase_pairs
 
 #Gene information data including descriptors and several annotation:
-readRDS("TCGA_data_normal/data_info_gen.RDS")-> data_info_gen
+readRDS("data/data_info_gen.RDS")-> data_info_gen
 
 #miRNA information data including identifier and transcript info:
-readRDS("TCGA_data_normal/data_info_mirna.RDS")-> data_info_mirna
+readRDS("data/data_info_mirna.RDS")-> data_info_mirna
 
 
 
