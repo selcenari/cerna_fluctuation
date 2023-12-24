@@ -65,6 +65,8 @@ starbase_pairs %>%
 
 unique(tissue_cerna$miRNAname)
 unique(tissue_cerna$geneName)
+
+length(unique(tissue_cerna$geneID))
 ```
 
 ```{r, message=FALSE, warning=FALSE, fig.align='center'}
@@ -136,6 +138,8 @@ starbase_pairs %>%
 
 unique(tissue_cerna$miRNAname)
 unique(tissue_cerna$geneName)
+
+length(unique(tissue_cerna$geneID))
 ```
 
 
@@ -209,6 +213,8 @@ starbase_pairs %>%
 
 unique(tissue_cerna$miRNAname)
 unique(tissue_cerna$geneName)
+
+length(unique(tissue_cerna$geneID))
 ```
 
 
@@ -277,7 +283,6 @@ cerna_pattern_cancer <- readRDS("data/cerna_pattern_cancer.RDS")
 type = "LUAD"
 
 cancer <- cerna_pattern_cancer %>% 
-  filter(tissue %in% selected_tissue) %>% 
   filter(tissue == type)
 
 
@@ -346,7 +351,6 @@ ggsave(paste0("luad_", i, ".png"), height = 4, width = 5)
 type = "PRAD"
 
 cancer <- cerna_pattern_cancer %>% 
-  filter(tissue %in% selected_tissue) %>% 
   filter(tissue == type)
 
 
@@ -415,7 +419,6 @@ ggsave(paste0("prad_", i, ".png"), height = 4, width = 5)
 type = "BRCA"
 
 cancer <- cerna_pattern_cancer %>% 
-  filter(tissue %in% selected_tissue) %>% 
   filter(tissue == type)
 
 
@@ -632,7 +635,7 @@ summary(res_luad)
 ```{r}
 res_luad %>% 
   filter(row %in% luad_specific) %>% 
-  filter(log2FoldChange   > 1, pvalue < 0.05)
+  filter(log2FoldChange   < -1, pvalue < 0.05)
 
 ## down 113,248 up
 ```
@@ -833,7 +836,7 @@ Let's check the DEG profiles of the ceRNAs:
 
 ```{r, message=FALSE, warning=FALSE}
 
-tcga_project_normal <-readRDS("data/tcga_project_normal.RDS")
+tcga_project_normal <-readRDS("data/tcga_project_normal.RDS") 
 
 data_info_gen <- readRDS("data/data_info_gen.RDS")
 
@@ -1134,7 +1137,7 @@ Let's check the DEG profiles of the ceRNAs:
 
 ```{r, message=FALSE, warning=FALSE}
 
-tcga_project_normal <-readRDS("data/tcga_project_normal.RDS")
+tcga_project_normal <-readRDS("data/tcga_project_normal.RDS") 
 
 data_info_gen <- readRDS("data/data_info_gen.RDS")
 
@@ -1234,7 +1237,7 @@ row.names(coldata) <- coldata$sample_id
 
 ```{r, message=FALSE, warning=FALSE}
 library(DESeq2)
-dds <- DESeqDataSetFromMatrix(countData = dea_input,
+dds <- DESeqDataSetFromMatrix(countData = round(dea_input),
                               colData = coldata,
                               design = ~ condition)
 
