@@ -563,7 +563,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -877,7 +877,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1178,7 +1178,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1516,7 +1516,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1661,7 +1661,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1806,7 +1806,7 @@ all_tcga_normal %>%
 
 ```
 
-NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link.
+NOTE: These datasets have been uploaded to zenodo due to github size limitation. Download from the link: https://doi.org/10.5281/zenodo.10686166
 
 ```{r, message=FALSE, warning=FALSE}
 log_new <- function(x){return(log2(x+1))}
@@ -1955,6 +1955,15 @@ cancer_gr %>%
 
 
 cancer_gr2 %>% pull(group) %>% unique() -> group_v
+```
+
+
+```{r}
+cancer_gr2 %>% 
+  filter(type == "mirna") %>% 
+    arrange(desc(centrality)) %>% 
+  as_tibble() %>% 
+  select(name, degree_centrality=centrality)
 ```
 
 
